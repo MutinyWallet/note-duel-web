@@ -10,7 +10,6 @@ export function Home() {
       <Header />
       <main class="flex flex-col items-start w-full p-4 gap-8 max-w-[30rem]">
         <ButtonLink href="/new">+ New Superposition</ButtonLink>
-        <pre>{state.noteDuel?.get_npub() || "err"}</pre>
         <div class="flex flex-col gap-4">
           <h2 class="text-2xl font-bold">Ready for Observation</h2>
           <Suspense>
