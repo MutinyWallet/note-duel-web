@@ -1,0 +1,56 @@
+{
+  "name": "note-duel-web",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "check-types": "tsc --noemit",
+    "eslint": "eslint src",
+    "pre-commit": "pnpm run eslint && pnpm run check-types && pnpm run format",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\"",
+    "check-format": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css,scss,md}\""
+  },
+  "license": "MIT",
+  "packageManager": "pnpm@8.6.6",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^20.8.10",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
+    "autoprefixer": "^10.4.16",
+    "esbuild": "^0.14.54",
+    "eslint": "^8.55.0",
+    "eslint-import-resolver-typescript": "2.7.1",
+    "eslint-plugin-import": "2.27.5",
+    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-solid": "0.13.0",
+    "postcss": "^8.4.22",
+    "prettier": "^3.1.1",
+    "prettier-plugin-tailwindcss": "^0.5.9",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5.3.3",
+    "vite": "^4.5.1",
+    "vite-plugin-pwa": "^0.16.7",
+    "vite-plugin-solid": "^2.7.0",
+    "vite-plugin-wasm": "^3.3.0",
+    "workbox-window": "^7.0.0"
+  },
+  "dependencies": {
+    "@benthecarman/note-duel": "^0.1.0",
+    "@fontsource-variable/inter": "^5.0.16",
+    "@kobalte/core": "^0.9.8",
+    "@kobalte/tailwindcss": "^0.5.0",
+    "@modular-forms/solid": "^0.18.1",
+    "@solidjs/meta": "^0.29.3",
+    "@solidjs/router": "^0.8.2",
+    "@thisbeyond/solid-select": "^0.14.0",
+    "solid-js": "^1.8.7",
+    "undici": "^5.21.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "prettier": {
+    "printWidth": 80
+  }
+}

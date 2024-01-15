@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+    <head>
+        <title data-sm="">Note Duel</title>
+        <meta charset="utf-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0 height=device-height viewport-fit=cover user-scalable=no"
+        />
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <meta name="theme-color" content="#171717" />
+        <meta
+            name="description"
+            content="Bet on nostr notes"
+        />
+        <link rel="icon" href="/favicon.svg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Note Duel" />
+        <meta
+            name="twitter:description"
+            content="Bet on nostr notes"
+        />
+        <meta name="twitter:site" content="https://noteduel.com/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Note Duel" />
+        <meta
+            property="og:description"
+            content="Bet on nostr notes"
+        />
+        <meta property="og:url" content="https://noteduel.com/" />
+        <link rel="apple-touch-icon" href="/favicon.svg" sizes="512x512" />
+<!--        <link rel="mask-icon" href="/mutiny_logo_mask.svg" color="#000" />-->
+        <style>
+            #no-wasm {
+                display: none;
+            }
+
+            #no-wasm,
+            #no-script {
+                margin: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="no-wasm">
+            <p>
+                Your browser does not support WebAssembly, or it's disabled.
+                Please update or enable WebAssembly to run this app.
+            </p>
+            <p>
+                If you're running iOS in lockdown mode you'll need to <a href="https://support.apple.com/en-us/HT212650">add an
+                exception for Note Duel.</a>
+            </p>
+        </div>
+        <noscript>
+            <div id="no-script">
+                <p>
+                    JavaScript must be enabled.
+                </p>
+            </div>
+        </noscript>
+    <div id="root"></div>
+        <script type="module" src="/src/index.tsx"></script>
+        <script>
+            // Check for WebAssembly support
+            if (
+                typeof WebAssembly === "object" &&
+                typeof WebAssembly.instantiate === "function"
+            ) {
+                var module = new WebAssembly.Module(
+                    new Uint8Array([0, 97, 115, 109, 1, 0, 0, 0])
+                ); // This is an empty wasm module
+                if (
+                    WebAssembly.Module instanceof Function &&
+                    module instanceof WebAssembly.Module
+                )
+                    console.log("WebAssembly is supported");
+                else document.getElementById("no-wasm").style.display = "block";
+            } else {
+                document.getElementById("no-wasm").style.display = "block";
+            }
+        </script>
+    </body>
+</html>

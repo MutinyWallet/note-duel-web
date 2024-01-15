@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply text-white bg-black;
+  overscroll-behavior-y: none;
+  min-height: 100.3%;
+  @apply font-sans antialiased;
+}
+
+#root {
+  @apply flex flex-col gap-4 items-center;
+}
+
+a {
+  @apply underline decoration-light-text hover:decoration-white;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+  @apply p-4 rounded-xl;
+  @apply text-white;
+  @apply placeholder-[#4E5B7E];
+  @apply border-[2px] focus:outline-none focus:ring-2 focus:ring-offset-2  ring-offset-black;
+}
