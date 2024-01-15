@@ -10,6 +10,7 @@ export function Profile() {
   }
 
   const [pubKey] = createResource(async () => state.noteDuel?.get_npub());
+
   return (
     <>
       <Header />

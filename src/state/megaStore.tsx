@@ -1,5 +1,5 @@
 import { createStore } from "solid-js/store";
-import { NoteDuelProxy } from "./noteduelProxy";
+import initNoteDuel, { NoteDuel } from "@benthecarman/note-duel";
 import {
   ParentComponent,
   onMount,
@@ -11,7 +11,7 @@ import {
 import { Header, ImportNsec } from "~/components";
 
 interface State {
-  noteDuel?: NoteDuelProxy;
+  noteDuel?: NoteDuel;
 }
 
 interface Actions {
@@ -25,17 +25,17 @@ const MegaStoreContext = createContext<MegaStore>();
 
 export const Provider: ParentComponent = (props) => {
   const [state, setState] = createStore({
-    noteDuel: undefined as NoteDuelProxy | undefined,
+    noteDuel: undefined as NoteDuel | undefined,
   });
 
   const actions = {
     async setup(nsec: string) {
-      const noteDuel = await NoteDuelProxy.new(nsec);
+      await initNoteDuel();
+      const noteDuel = new NoteDuel(nsec);
       setState({ noteDuel });
 
       const npub = await noteDuel.get_npub();
-
-      console.log("npub:" + npub);
+      console.log("setup complete with npub:" + npub);
     },
     async hello() {
       console.log("Hello");

@@ -5,9 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@benthecarman/kormir-wasm':
-    specifier: ^0.1.2
-    version: 0.1.2
+  '@benthecarman/note-duel':
+    specifier: ^0.1.0
+    version: 0.1.0
   '@fontsource-variable/inter':
     specifier: ^5.0.16
     version: 5.0.16
@@ -1628,8 +1628,8 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@benthecarman/kormir-wasm@0.1.2:
-    resolution: {integrity: sha512-H/hELYF08X7hp7dY9ON/JLxjXacKn0bMGn3fFsiojT1etAMf8FzNeiREzYJgIRUNF3FvKxCZkoZ7/782/P354Q==}
+  /@benthecarman/note-duel@0.1.0:
+    resolution: {integrity: sha512-JaT23pKy1n/EvPdx1V2u1U+wCn40WGhjhi+B1HSdM2+SiCopSyMxylP2XvEGdqNAfMDfX92NWwVC+TG949CRSw==}
     dev: false
 
   /@esbuild/android-arm64@0.18.20:
