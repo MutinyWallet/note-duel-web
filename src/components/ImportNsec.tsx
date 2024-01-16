@@ -74,7 +74,6 @@ export function ImportNsec() {
             disabled={
               !importForm.dirty || importForm.submitting || importForm.invalid
             }
-            intent="blue"
             type="submit"
           >
             Import

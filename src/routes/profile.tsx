@@ -9,17 +9,19 @@ export function Profile() {
     console.log("no state");
   }
 
-  const [pubKey] = createResource(async () => state.noteDuel?.get_npub());
+  // const [pubKey] = createResource(async () => state.noteDuel?.get_npub());
+
+  // const pubkey = state.noteDuel?.get_npub();
 
   return (
     <>
       <Header />
       <main>
-        <Suspense fallback={<>loading...</>}>
+        {/* <pre>{pubkey}</pre> */}
+        {/* <Suspense fallback={<>loading...</>}>
           <Show when={pubKey()}>
-            <pre>{pubKey()}</pre>
           </Show>
-        </Suspense>
+        </Suspense> */}
       </main>
     </>
   );

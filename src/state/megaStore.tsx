@@ -9,8 +9,10 @@ import {
   Match,
 } from "solid-js";
 import { Header, ImportNsec } from "~/components";
+import NDK from "@nostr-dev-kit/ndk";
 
 interface State {
+  ndk: NDK;
   noteDuel?: NoteDuel;
 }
 
@@ -26,16 +28,36 @@ const MegaStoreContext = createContext<MegaStore>();
 export const Provider: ParentComponent = (props) => {
   const [state, setState] = createStore({
     noteDuel: undefined as NoteDuel | undefined,
+    ndk: new NDK({
+      explicitRelayUrls: [
+        "wss://nostr.mutinywallet.com",
+        "wss://relay.snort.social",
+        "wss://nos.lol",
+        "wss://nostr.fmt.wiz.biz",
+        "wss://relay.damus.io",
+        "wss://relay.primal.net",
+        "wss://nostr.wine",
+        "wss://relay.nostr.band",
+        "wss://nostr.zbd.gg",
+        "wss://relay.nos.social",
+      ],
+      enableOutboxModel: false,
+    }),
   });
 
   const actions = {
     async setup(nsec: string) {
+      // noteduel stuff
       await initNoteDuel();
       const noteDuel = new NoteDuel(nsec);
       setState({ noteDuel });
 
-      const npub = await noteDuel.get_npub();
+      const npub = noteDuel.get_npub();
       console.log("setup complete with npub:" + npub);
+
+      // ndk stuff
+      await state.ndk.connect(6000);
+      console.log("connected");
     },
     async hello() {
       console.log("Hello");
