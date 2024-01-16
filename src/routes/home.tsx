@@ -1,26 +1,7 @@
-import NDK, { NDKEvent } from "@nostr-dev-kit/ndk";
-import {
-  For,
-  JSX,
-  Match,
-  Show,
-  Suspense,
-  Switch,
-  createMemo,
-  createResource,
-} from "solid-js";
-import {
-  Button,
-  ButtonLink,
-  EventList,
-  Header,
-  ImportNsec,
-  InnerCard,
-} from "~/components";
+import { For, JSX, Show, Suspense, createMemo, createResource } from "solid-js";
+import { ButtonLink, Header, InnerCard } from "~/components";
 import { useMegaStore } from "~/state/megaStore";
 import { nip19 } from "nostr-tools";
-import { Announcement, NoteDuel } from "@benthecarman/note-duel";
-import { useNavigate } from "@solidjs/router";
 import { DecodedNDKEvent, decodeNdkEvents } from "~/utils";
 
 export function Home() {
@@ -120,7 +101,7 @@ export function SingleSuper(props: {
   );
 }
 
-function PreKeyValue(props: { key: string; children: JSX.Element }) {
+export function PreKeyValue(props: { key: string; children: JSX.Element }) {
   return (
     <pre class="text-neutral-400">
       <span class="text-white font-bold">{props.key}</span> {props.children}

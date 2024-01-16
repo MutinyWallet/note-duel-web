@@ -8,17 +8,18 @@ import {
   Switch,
   Match,
 } from "solid-js";
-import { Header, ImportNsec } from "~/components";
+import { ImportNsec } from "~/components";
 import NDK from "@nostr-dev-kit/ndk";
+import { Profile, fetchProfile } from "~/utils";
 
 interface State {
   ndk: NDK;
   noteDuel?: NoteDuel;
+  profile?: Profile;
 }
 
 interface Actions {
   setup: (nsec: string) => void;
-  hello: () => void;
 }
 
 export type MegaStore = [State, Actions];
@@ -43,6 +44,7 @@ export const Provider: ParentComponent = (props) => {
       ],
       enableOutboxModel: false,
     }),
+    profile: undefined as Profile | undefined,
   });
 
   const actions = {
@@ -51,21 +53,20 @@ export const Provider: ParentComponent = (props) => {
       await initNoteDuel();
       const noteDuel = await new NoteDuel(nsec);
       console.log(noteDuel);
-      setState({ noteDuel });
 
       try {
         const npub = noteDuel.get_npub();
         console.log("setup complete with npub:" + npub);
+        setState({ noteDuel });
+
+        // ndk stuff
+        await state.ndk.connect(6000);
+        console.log("connected");
+        const profile = await fetchProfile(state.ndk, npub);
+        setState({ profile });
       } catch (e) {
         console.error(e);
       }
-
-      // ndk stuff
-      await state.ndk.connect(6000);
-      console.log("connected");
-    },
-    async hello() {
-      console.log("Hello");
     },
   };
 
@@ -83,7 +84,6 @@ export const Provider: ParentComponent = (props) => {
       <Switch>
         <Match when={state.noteDuel !== undefined}>{props.children}</Match>
         <Match when={state.noteDuel === undefined}>
-          <Header />
           <ImportNsec />
         </Match>
       </Switch>
