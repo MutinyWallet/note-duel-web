@@ -49,11 +49,16 @@ export const Provider: ParentComponent = (props) => {
     async setup(nsec: string) {
       // noteduel stuff
       await initNoteDuel();
-      const noteDuel = new NoteDuel(nsec);
+      const noteDuel = await new NoteDuel(nsec);
+      console.log(noteDuel);
       setState({ noteDuel });
 
-      const npub = noteDuel.get_npub();
-      console.log("setup complete with npub:" + npub);
+      try {
+        const npub = noteDuel.get_npub();
+        console.log("setup complete with npub:" + npub);
+      } catch (e) {
+        console.error(e);
+      }
 
       // ndk stuff
       await state.ndk.connect(6000);

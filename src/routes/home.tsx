@@ -76,7 +76,6 @@ export function SingleSuper(props: {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <ImportNsec />
       <InnerCard>
         <div class="flex flex-col gap-4">
           <h2 class="text-center font-semibold text-2xl bg-clip-text text-transparent bg-gradient-to-r from-[#eeaeca] to-[#94bbe9]">
