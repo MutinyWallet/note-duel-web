@@ -165,9 +165,9 @@ export function New() {
                     multiline
                     value={field.value}
                     error={field.error}
-                    label="Your note"
+                    label="Your losing note"
                     caption={`This note will be automatically published on your nostr feed if
-              "${userSelectedOption()}" happens`}
+              "${opponentImplicitOption()}" happens`}
                   />
                 )}
               </Field>
@@ -179,8 +179,8 @@ export function New() {
                     multiline
                     value={field.value}
                     error={field.error}
-                    label="Opponent note"
-                    caption={`This note will be automatically published on your opponent's nostr feed if "${opponentImplicitOption()}" happens`}
+                    label="Opponent losing note"
+                    caption={`This note will be automatically published on your opponent's nostr feed if "${userSelectedOption()}" happens`}
                   />
                 )}
               </Field>
