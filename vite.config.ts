@@ -1,4 +1,4 @@
-import * as child from "child_process";
+// import * as child from "child_process";
 import * as path from "path";
 import autoprefixer from "autoprefixer";
 import tailwindcss from "tailwindcss";
@@ -9,7 +9,7 @@ import wasm from "vite-plugin-wasm";
 
 import manifest from "./manifest";
 
-const commitHash = process.env.VITE_COMMIT_HASH ?? "";
+// const commitHash = process.env.VITE_COMMIT_HASH ?? "";
 // child.execSync("git rev-parse --short HEAD").toString().trim()
 
 const pwaOptions: Partial<VitePWAOptions> = {
@@ -42,12 +42,12 @@ export default defineConfig({
     },
   },
   plugins: [wasm(), solid(), VitePWA(pwaOptions)],
-  define: {
-    "import.meta.env.__COMMIT_HASH__": JSON.stringify(commitHash),
-    "import.meta.env.__RELEASE_VERSION__": JSON.stringify(
-      process.env.npm_package_version,
-    ),
-  },
+  // define: {
+  //   "import.meta.env.__COMMIT_HASH__": JSON.stringify(commitHash),
+  //   "import.meta.env.__RELEASE_VERSION__": JSON.stringify(
+  //     process.env.npm_package_version,
+  //   ),
+  // },
   resolve: {
     alias: [{ find: "~", replacement: path.resolve(__dirname, "./src") }],
   },

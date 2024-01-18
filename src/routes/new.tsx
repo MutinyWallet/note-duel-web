@@ -81,6 +81,7 @@ export function New() {
         outcomes,
       });
       await state.noteDuel?.create_bet_wasm(
+        "I win!",
         losingMessage,
         announcement,
         announcementId,

@@ -9,6 +9,7 @@ export function Home() {
 
   async function fetchSuperpositions() {
     const supers = await state.ndk.fetchEvents({
+      // @ts-expect-error ndk doesn't know about kind 88 yet
       kinds: [88],
       limit: 20,
     });

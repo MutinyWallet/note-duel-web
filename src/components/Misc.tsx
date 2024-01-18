@@ -1,5 +1,6 @@
 import { Dialog, Separator } from "@kobalte/core";
 import { JSX, ParentComponent, Show } from "solid-js";
+import close from "~/assets/icons/close.svg";
 
 export const SmallHeader: ParentComponent<{ class?: string }> = (props) => {
   return (
