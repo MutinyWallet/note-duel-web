@@ -18,11 +18,21 @@ export function Home() {
 
   const [supers] = createResource(fetchSuperpositions);
 
+  async function fetchPending() {
+    const pending = await state.noteDuel?.list_pending_events_wasm();
+    console.log("pending", pending);
+  }
+
+  const [pending] = createResource(fetchPending);
+
   return (
     <>
       <Header />
       <main class="flex flex-col items-start w-full p-4 gap-4 max-w-[30rem]">
         <h2 class="text-2xl font-bold">Superpositions</h2>
+        <Suspense fallback={<div>Loading...</div>}>
+          <pre>{JSON.stringify(pending(), null, 2)}</pre>
+        </Suspense>
         <Suspense fallback={<div>Loading...</div>}>
           <Show when={supers()?.length === 0}>
             <div>

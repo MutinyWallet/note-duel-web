@@ -1,21 +1,30 @@
 import { createForm, getValue, setValue } from "@modular-forms/solid";
-import { useParams } from "@solidjs/router";
-import { For, Show, Suspense, createMemo, createResource } from "solid-js";
+import { useNavigate, useParams } from "@solidjs/router";
+import {
+  For,
+  Show,
+  Suspense,
+  createMemo,
+  createResource,
+  createSignal,
+} from "solid-js";
 import { Button, Header, InnerCard, SmallHeader, VStack } from "~/components";
 import { TextField } from "~/components/TextField";
 import { useMegaStore } from "~/state/megaStore";
-import { decodeNdkEvents } from "~/utils";
+import { decodeNdkEvents, eify } from "~/utils";
 import { SingleSuper } from "./home";
 
 type CreateDuelForm = {
   opponent_npub: string;
   outcome: string;
-  yourNote: string;
-  opponentNote: string;
+  losingNote: string;
+  // opponentNote: string;
 };
 
 export function New() {
   const [state, _actions] = useMegaStore();
+  const navigate = useNavigate();
+  const [error, setError] = createSignal<Error | undefined>(undefined);
 
   const onSave = async () => {
     // setDialogOpen(false);
@@ -46,16 +55,43 @@ export function New() {
       initialValues: {
         opponent_npub: "",
         outcome: "",
-        yourNote: "",
-        opponentNote: "",
+        losingNote: "",
+        // opponentNote: "",
       },
     });
 
   async function handleSubmit(f: CreateDuelForm) {
+    setError(undefined);
     try {
       console.log(f);
+
+      // create_bet_wasm(losing_message: string, announcement: string, announcement_id: string, counter_party: string, outcomes: (string)[]): Promise<void>;
+      const losingMessage = f.losingNote;
+      const announcement = singleEvent()?.content || "";
+      const announcementId = singleEvent()?.id || "";
+      const counter_party = f.opponent_npub;
+      // TODO: this is right, yeah?
+      const outcomes = [f.outcome, opponentImplicitOption() || ""];
+
+      console.log("creating bet with", {
+        losingMessage,
+        announcement,
+        announcementId,
+        counter_party,
+        outcomes,
+      });
+      await state.noteDuel?.create_bet_wasm(
+        losingMessage,
+        announcement,
+        announcementId,
+        counter_party,
+        outcomes,
+      );
+
+      navigate("/");
     } catch (e) {
       console.error(e);
+      setError(eify(e));
     }
   }
 
@@ -157,7 +193,7 @@ export function New() {
               </Field>
               {/* <pre>Selected value: {getValue(creationForm, "outcome")}</pre> */}
 
-              <Field name="yourNote">
+              <Field name="losingNote">
                 {(field, props) => (
                   <TextField
                     {...props}
@@ -165,13 +201,12 @@ export function New() {
                     multiline
                     value={field.value}
                     error={field.error}
-                    label="Your losing note"
-                    caption={`This note will be automatically published on your nostr feed if
-              "${opponentImplicitOption()}" happens`}
+                    label="Losing note"
+                    caption={`This note will be automatically published on the nostr feed of the loser.`}
                   />
                 )}
               </Field>
-              <Field name="opponentNote">
+              {/* <Field name="opponentNote">
                 {(field, props) => (
                   <TextField
                     {...props}
@@ -183,9 +218,19 @@ export function New() {
                     caption={`This note will be automatically published on your opponent's nostr feed if "${userSelectedOption()}" happens`}
                   />
                 )}
-              </Field>
 
-              <Button type="submit" disabled={!userSelectedOption()}>
+              </Field> */}
+              <Show when={error()}>
+                <div class="p-2 bg-red-500 rounded-xl text-white">
+                  <pre>{error()?.message}</pre>
+                </div>
+              </Show>
+
+              <Button
+                type="submit"
+                disabled={!userSelectedOption()}
+                loading={creationForm.submitting}
+              >
                 Publish Duel
               </Button>
             </VStack>

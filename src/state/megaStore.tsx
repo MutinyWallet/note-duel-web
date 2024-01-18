@@ -51,7 +51,7 @@ export const Provider: ParentComponent = (props) => {
     async setup(nsec: string) {
       // noteduel stuff
       await initNoteDuel();
-      const noteDuel = await new NoteDuel(nsec);
+      const noteDuel = await new NoteDuel(nsec, "https://api.noteduel.com");
       console.log(noteDuel);
 
       try {
