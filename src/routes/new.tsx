@@ -1,14 +1,7 @@
 import { createForm, getValue, setValue } from "@modular-forms/solid";
 import { useNavigate, useParams } from "@solidjs/router";
-import {
-  For,
-  Show,
-  Suspense,
-  createMemo,
-  createResource,
-  createSignal,
-} from "solid-js";
-import { Button, Header, InnerCard, SmallHeader, VStack } from "~/components";
+import { For, Show, Suspense, createResource, createSignal } from "solid-js";
+import { Button, Header, SmallHeader, VStack } from "~/components";
 import { TextField } from "~/components/TextField";
 import { useMegaStore } from "~/state/megaStore";
 import { decodeNdkEvents, eify } from "~/utils";
@@ -45,15 +38,14 @@ export function New() {
 
   const [singleEvent] = createResource(params.id, fetchSingle);
 
-  const [creationForm, { Form, Field, FieldArray }] =
-    createForm<CreateDuelForm>({
-      initialValues: {
-        opponent_npub: "",
-        outcome: "",
-        losingNote: "",
-        winningNote: "",
-      },
-    });
+  const [creationForm, { Form, Field }] = createForm<CreateDuelForm>({
+    initialValues: {
+      opponent_npub: "",
+      outcome: "",
+      losingNote: "",
+      winningNote: "",
+    },
+  });
 
   async function handleSubmit(f: CreateDuelForm) {
     setError(undefined);
@@ -93,13 +85,6 @@ export function New() {
   }
 
   const userSelectedOption = () => getValue(creationForm, "outcome");
-  const opponentImplicitOption = createMemo(() => {
-    if (userSelectedOption()) {
-      return singleEvent()?.decodedContent?.outcomes?.filter(
-        (o) => o !== userSelectedOption(),
-      )[0];
-    }
-  });
 
   return (
     <>
@@ -132,7 +117,7 @@ export function New() {
                 )}
               </Field>
               <Field name="outcome">
-                {(field, props) => (
+                {(field, _props) => (
                   <fieldset>
                     <div class="flex flex-col gap-2">
                       <legend>
@@ -190,19 +175,6 @@ export function New() {
               </Field>
               {/* <pre>Selected value: {getValue(creationForm, "outcome")}</pre> */}
 
-              <Field name="losingNote">
-                {(field, props) => (
-                  <TextField
-                    {...props}
-                    {...field}
-                    multiline
-                    value={field.value}
-                    error={field.error}
-                    label="Losing note"
-                    caption={`This note will be automatically published on the nostr feed of the loser.`}
-                  />
-                )}
-              </Field>
               <Field name="winningNote">
                 {(field, props) => (
                   <TextField
@@ -216,6 +188,21 @@ export function New() {
                   />
                 )}
               </Field>
+
+              <Field name="losingNote">
+                {(field, props) => (
+                  <TextField
+                    {...props}
+                    {...field}
+                    multiline
+                    value={field.value}
+                    error={field.error}
+                    label="Losing note"
+                    caption={`This note will be automatically published on the nostr feed of the loser.`}
+                  />
+                )}
+              </Field>
+
               <Show when={error()}>
                 <div class="p-2 bg-red-500 rounded-xl text-white">
                   <pre>{error()?.message}</pre>

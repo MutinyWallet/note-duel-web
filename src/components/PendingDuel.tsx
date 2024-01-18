@@ -146,10 +146,10 @@ export function SinglePendingDuel(props: { duel: PendingDuel }) {
         <Suspense>
           <p class="text-lg">
             {profile()?.profile?.name} has bet on{" "}
-            <strong>{`"${props.duel.user_outcomes[0]}"`}</strong> to win. That
-            means your choice is{" "}
-            <strong>{`"${props.duel.counterparty_outcomes[0]}"`}</strong>. Will
-            you accept?
+            <strong>{`"${props.duel.counterparty_outcomes[0]}"`}</strong> to
+            win. That means your choice is{" "}
+            <strong>{`"${props.duel.user_outcomes[0]}"`}</strong>. Will you
+            accept?
           </p>
         </Suspense>
         <Show when={error()}>
