@@ -21,8 +21,15 @@ export function Home() {
   return (
     <>
       <Header />
-      <main class="flex flex-col items-start w-full p-4 gap-8 max-w-[30rem]">
+      <main class="flex flex-col items-start w-full p-4 gap-4 max-w-[30rem]">
+        <h2 class="text-2xl font-bold">Superpositions</h2>
         <Suspense fallback={<div>Loading...</div>}>
+          <Show when={supers()?.length === 0}>
+            <div>
+              No Superpositions found. Maybe you want to{" "}
+              <a href="#">create one?</a>
+            </div>
+          </Show>
           <For each={supers()}>
             {(sup) => <SingleSuper super={sup} mode="list" />}
           </For>

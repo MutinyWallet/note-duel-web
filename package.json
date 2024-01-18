@@ -36,7 +36,7 @@
     "workbox-window": "^7.0.0"
   },
   "dependencies": {
-    "@benthecarman/note-duel": "^0.1.1",
+    "@benthecarman/note-duel": "^0.1.2",
     "@fontsource-variable/inter": "^5.0.16",
     "@kobalte/core": "^0.9.8",
     "@kobalte/tailwindcss": "^0.5.0",
