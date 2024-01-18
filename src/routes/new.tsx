@@ -18,18 +18,13 @@ type CreateDuelForm = {
   opponent_npub: string;
   outcome: string;
   losingNote: string;
-  // opponentNote: string;
+  winningNote: string;
 };
 
 export function New() {
   const [state, _actions] = useMegaStore();
   const navigate = useNavigate();
   const [error, setError] = createSignal<Error | undefined>(undefined);
-
-  const onSave = async () => {
-    // setDialogOpen(false);
-    // await refetch();
-  };
 
   const params = useParams();
 
@@ -56,7 +51,7 @@ export function New() {
         opponent_npub: "",
         outcome: "",
         losingNote: "",
-        // opponentNote: "",
+        winningNote: "",
       },
     });
 
@@ -65,7 +60,7 @@ export function New() {
     try {
       console.log(f);
 
-      // create_bet_wasm(losing_message: string, announcement: string, announcement_id: string, counter_party: string, outcomes: (string)[]): Promise<void>;
+      const winningMessage = f.winningNote;
       const losingMessage = f.losingNote;
       const announcement = singleEvent()?.content || "";
       const announcementId = singleEvent()?.id || "";
@@ -73,14 +68,16 @@ export function New() {
       const outcomes = [f.outcome];
 
       console.log("creating bet with", {
+        winningMessage,
         losingMessage,
+
         announcement,
         announcementId,
         counter_party,
         outcomes,
       });
       await state.noteDuel?.create_bet_wasm(
-        "I win!",
+        winningMessage,
         losingMessage,
         announcement,
         announcementId,
@@ -206,7 +203,7 @@ export function New() {
                   />
                 )}
               </Field>
-              {/* <Field name="opponentNote">
+              <Field name="winningNote">
                 {(field, props) => (
                   <TextField
                     {...props}
@@ -214,12 +211,11 @@ export function New() {
                     multiline
                     value={field.value}
                     error={field.error}
-                    label="Opponent losing note"
-                    caption={`This note will be automatically published on your opponent's nostr feed if "${userSelectedOption()}" happens`}
+                    label="Winning note"
+                    caption={`This note will be automatically published on the nostr feed of the winner.`}
                   />
                 )}
-
-              </Field> */}
+              </Field>
               <Show when={error()}>
                 <div class="p-2 bg-red-500 rounded-xl text-white">
                   <pre>{error()?.message}</pre>

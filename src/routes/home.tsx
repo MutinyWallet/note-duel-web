@@ -3,6 +3,7 @@ import { ButtonLink, Header, InnerCard } from "~/components";
 import { useMegaStore } from "~/state/megaStore";
 import { nip19 } from "nostr-tools";
 import { DecodedNDKEvent, decodeNdkEvents } from "~/utils";
+import { PendingDuel, SinglePendingDuel } from "~/components/PendingDuel";
 
 export function Home() {
   const [state, _] = useMegaStore();
@@ -20,9 +21,14 @@ export function Home() {
   const [supers] = createResource(fetchSuperpositions);
 
   async function fetchPending() {
-    const pending = await state.noteDuel?.list_pending_events_wasm();
-    console.log("pending", pending);
-    return pending || [];
+    try {
+      const pending = await state.noteDuel?.list_pending_events_wasm();
+      console.log("pending", pending);
+      return (pending || []) as PendingDuel[];
+    } catch (e) {
+      console.error(e);
+    }
+    return [] as PendingDuel[];
   }
 
   const [pending] = createResource(fetchPending);
@@ -36,7 +42,9 @@ export function Home() {
           <Show when={pending()?.length === 0}>
             <div>No pending duels found.</div>
           </Show>
-          <pre>{JSON.stringify(pending(), null, 2)}</pre>
+          <For each={pending()}>
+            {(duel) => <SinglePendingDuel duel={duel} />}
+          </For>
         </Suspense>
         <h2 class="text-2xl font-bold">Superpositions</h2>
         <Suspense fallback={<div>Loading...</div>}>
