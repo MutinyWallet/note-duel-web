@@ -6,7 +6,7 @@ import {
 } from "@modular-forms/solid";
 import { createSignal, Show } from "solid-js";
 
-import { Button, VStack } from "~/components";
+import { Button, Header, VStack } from "~/components";
 import { InfoBox } from "~/components/InfoBox";
 import { TextField } from "~/components/TextField";
 import { Checkbox } from "~/components/CheckBox";
@@ -44,43 +44,45 @@ export function ImportNsec() {
 
   return (
     <>
-      <Form onSubmit={handleSubmit}>
-        <VStack>
-          <Field name="nsec" validate={[required("Nsec is required")]}>
-            {(field, props) => (
-              <TextField
-                {...props}
-                {...field}
-                value={field.value}
-                error={field.error}
-                label="Your nsec"
-              />
-            )}
-          </Field>
-          <Field name="save" type="boolean">
-            {(field, _fieldProps) => (
-              <Checkbox
-                checked={field.value || false}
-                label="Save for future"
-                onChange={(c) => setValue(importForm, "save", c)}
-              />
-            )}
-          </Field>
-          <Show when={error()}>
-            <InfoBox accent="red">{error()}</InfoBox>
-          </Show>
-          <Button
-            loading={importForm.submitting}
-            disabled={
-              !importForm.dirty || importForm.submitting || importForm.invalid
-            }
-            intent="blue"
-            type="submit"
-          >
-            Import
-          </Button>
-        </VStack>
-      </Form>
+      <Header import />
+      <main class="flex flex-col items-center justify-center w-full p-4 gap-8 max-w-[30rem]">
+        <Form onSubmit={handleSubmit}>
+          <VStack>
+            <Field name="nsec" validate={[required("Nsec is required")]}>
+              {(field, props) => (
+                <TextField
+                  {...props}
+                  {...field}
+                  value={field.value}
+                  error={field.error}
+                  label="Your nsec"
+                />
+              )}
+            </Field>
+            <Field name="save" type="boolean">
+              {(field, _fieldProps) => (
+                <Checkbox
+                  checked={field.value || false}
+                  label="Save for future"
+                  onChange={(c) => setValue(importForm, "save", c)}
+                />
+              )}
+            </Field>
+            <Show when={error()}>
+              <InfoBox accent="red">{error()}</InfoBox>
+            </Show>
+            <Button
+              loading={importForm.submitting}
+              disabled={
+                !importForm.dirty || importForm.submitting || importForm.invalid
+              }
+              type="submit"
+            >
+              Import
+            </Button>
+          </VStack>
+        </Form>
+      </main>
     </>
   );
 }

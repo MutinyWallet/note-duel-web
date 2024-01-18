@@ -11,7 +11,7 @@
     "noEmit": true,
     "jsx": "preserve",
     "strict": true,
-    "types": ["node", "vite-plugin-pwa/client"],
+    "types": ["node", "vite-plugin-pwa/client", "./src/types/index.d.ts", "./src/types/solid-js-custom.d.ts"],
     "baseUrl": "./",
     "paths": {
       "~/*": ["./src/*"]

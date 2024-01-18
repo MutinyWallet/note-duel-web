@@ -1,6 +1,12 @@
-import { Header } from "~/components";
+import { Button, Header } from "~/components";
 import { useMegaStore } from "~/state/megaStore";
-import { createResource, Show, Suspense } from "solid-js";
+import { PreKeyValue } from "./home";
+
+type Profile = {
+  image: string;
+  name: string;
+  npub: string;
+};
 
 export function Profile() {
   const [state, _actions] = useMegaStore();
@@ -9,17 +15,25 @@ export function Profile() {
     console.log("no state");
   }
 
-  const [pubKey] = createResource(async () => state.noteDuel?.get_npub());
+  function signOut() {
+    localStorage.removeItem("nsec");
+    window.location.href = "/";
+  }
 
   return (
     <>
       <Header />
-      <main>
-        <Suspense fallback={<>loading...</>}>
-          <Show when={pubKey()}>
-            <pre>{pubKey()}</pre>
-          </Show>
-        </Suspense>
+      <main class="flex flex-col items-start w-full p-4 gap-4 max-w-[30rem]">
+        <h2 class="text-2xl font-semibold">{state.profile?.name}</h2>
+        <PreKeyValue key="npub">
+          <a
+            class="whitespace-pre-wrap break-all"
+            href={`https://njump.me/${state.profile?.npub}`}
+          >
+            {state.profile?.npub}
+          </a>
+        </PreKeyValue>
+        <Button onClick={signOut}>Sign Out</Button>
       </main>
     </>
   );

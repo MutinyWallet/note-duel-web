@@ -8,15 +8,18 @@ import {
   Switch,
   Match,
 } from "solid-js";
-import { Header, ImportNsec } from "~/components";
+import { ImportNsec } from "~/components";
+import NDK from "@nostr-dev-kit/ndk";
+import { Profile, fetchProfile } from "~/utils";
 
 interface State {
+  ndk: NDK;
   noteDuel?: NoteDuel;
+  profile?: Profile;
 }
 
 interface Actions {
   setup: (nsec: string) => void;
-  hello: () => void;
 }
 
 export type MegaStore = [State, Actions];
@@ -26,19 +29,44 @@ const MegaStoreContext = createContext<MegaStore>();
 export const Provider: ParentComponent = (props) => {
   const [state, setState] = createStore({
     noteDuel: undefined as NoteDuel | undefined,
+    ndk: new NDK({
+      explicitRelayUrls: [
+        "wss://nostr.mutinywallet.com",
+        "wss://relay.snort.social",
+        "wss://nos.lol",
+        "wss://nostr.fmt.wiz.biz",
+        "wss://relay.damus.io",
+        "wss://relay.primal.net",
+        "wss://nostr.wine",
+        "wss://relay.nostr.band",
+        "wss://nostr.zbd.gg",
+        "wss://relay.nos.social",
+      ],
+      enableOutboxModel: false,
+    }),
+    profile: undefined as Profile | undefined,
   });
 
   const actions = {
     async setup(nsec: string) {
+      // noteduel stuff
       await initNoteDuel();
-      const noteDuel = new NoteDuel(nsec);
-      setState({ noteDuel });
+      const noteDuel = await new NoteDuel(nsec, "https://api.noteduel.com");
+      console.log(noteDuel);
 
-      const npub = await noteDuel.get_npub();
-      console.log("setup complete with npub:" + npub);
-    },
-    async hello() {
-      console.log("Hello");
+      try {
+        const npub = noteDuel.get_npub();
+        console.log("setup complete with npub:" + npub);
+        setState({ noteDuel });
+
+        // ndk stuff
+        await state.ndk.connect(6000);
+        console.log("connected");
+        const profile = await fetchProfile(state.ndk, npub);
+        setState({ profile });
+      } catch (e) {
+        console.error(e);
+      }
     },
   };
 
@@ -56,7 +84,6 @@ export const Provider: ParentComponent = (props) => {
       <Switch>
         <Match when={state.noteDuel !== undefined}>{props.children}</Match>
         <Match when={state.noteDuel === undefined}>
-          <Header />
           <ImportNsec />
         </Match>
       </Switch>

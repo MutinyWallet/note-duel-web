@@ -48,7 +48,7 @@ export function TextField(props: TextFieldProps) {
           <KTextField.Input
             {...fieldProps}
             type={props.type}
-            class="w-full rounded-lg bg-white/10 p-2 placeholder-m-grey-400 disabled:text-m-grey-400"
+            class="w-full rounded-lg bg-white/10 p-2 placeholder-neutral-400 disabled:text-neutral-400"
           />
         }
       >
