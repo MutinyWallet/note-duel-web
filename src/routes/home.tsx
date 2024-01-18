@@ -31,7 +31,7 @@ export function Home() {
     return [] as PendingDuel[];
   }
 
-  const [pending] = createResource(fetchPending);
+  const [pending, { refetch }] = createResource(fetchPending);
 
   return (
     <>
@@ -43,7 +43,7 @@ export function Home() {
             <div>No pending duels found.</div>
           </Show>
           <For each={pending()}>
-            {(duel) => <SinglePendingDuel duel={duel} />}
+            {(duel) => <SinglePendingDuel duel={duel} refetch={refetch} />}
           </For>
         </Suspense>
         <h2 class="text-2xl font-bold">Superpositions</h2>

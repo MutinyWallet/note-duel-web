@@ -44,7 +44,10 @@ export type PendingDuel = {
   //   lose_outcome_event_id: any;
 };
 
-export function SinglePendingDuel(props: { duel: PendingDuel }) {
+export function SinglePendingDuel(props: {
+  duel: PendingDuel;
+  refetch: () => void;
+}) {
   const [state, _actions] = useMegaStore();
 
   async function fetchSuperposition() {
