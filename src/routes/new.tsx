@@ -70,8 +70,7 @@ export function New() {
       const announcement = singleEvent()?.content || "";
       const announcementId = singleEvent()?.id || "";
       const counter_party = f.opponent_npub;
-      // TODO: this is right, yeah?
-      const outcomes = [f.outcome, opponentImplicitOption() || ""];
+      const outcomes = [f.outcome];
 
       console.log("creating bet with", {
         losingMessage,
