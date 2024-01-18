@@ -67,19 +67,6 @@ export function SingleSuper(props: {
   super: DecodedNDKEvent;
   mode: "new" | "list";
 }) {
-  const [state, _] = useMegaStore();
-
-  async function fetchProfile() {
-    const profile = await state.ndk.fetchEvent({
-      kinds: [0],
-      authors: [props.super.pubkey],
-    });
-
-    return profile;
-  }
-
-  const [profile] = createResource(fetchProfile);
-
   const npub = createMemo(() => {
     // return props.super.pubkey;
     const npub = nip19.npubEncode(props.super.pubkey);

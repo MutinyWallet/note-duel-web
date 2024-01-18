@@ -1,8 +1,8 @@
 import { NDKEvent, NDKUser } from "@nostr-dev-kit/ndk";
 import { useMegaStore } from "~/state/megaStore";
-import { decodeNdkEvents } from "~/utils";
+import { decodeNdkEvents, eify } from "~/utils";
 import { InnerCard, VStack } from "./Misc";
-import { Show, Suspense, createResource } from "solid-js";
+import { Show, Suspense, createResource, createSignal } from "solid-js";
 import { PreKeyValue, SingleSuper } from "~/routes";
 import { Button } from "./Button";
 
@@ -40,8 +40,8 @@ export type PendingDuel = {
   oracle_event_id: string;
   user_outcomes: Array<string>;
   counterparty_outcomes: Array<string>;
-  win_outcome_event_id: any;
-  lose_outcome_event_id: any;
+  //   win_outcome_event_id: any;
+  //   lose_outcome_event_id: any;
 };
 
 export function SinglePendingDuel(props: { duel: PendingDuel }) {
@@ -72,10 +72,6 @@ export function SinglePendingDuel(props: { duel: PendingDuel }) {
     const user = new NDKUser({ hexpubkey: props.duel.win_a.pubkey });
     user.ndk = state.ndk;
     const profile = await user.fetchProfile({ closeOnEose: true });
-    // const profile = await state.ndk.fetchEvent({
-    //   kinds: [0],
-    //   authors: [props.duel.win_a.pubkey],
-    // });
 
     const npub = user.npub;
 
@@ -83,6 +79,22 @@ export function SinglePendingDuel(props: { duel: PendingDuel }) {
   }
 
   const [profile] = createResource(fetchProfile);
+
+  const [accepting, setAccepting] = createSignal(false);
+  const [error, setError] = createSignal<Error | undefined>(undefined);
+
+  async function handleAccept() {
+    try {
+      setAccepting(true);
+      const res = await state.noteDuel?.accept_bet_wasm(props.duel.id);
+      console.log(res);
+    } catch (e) {
+      console.error(e);
+      setError(eify(e));
+    } finally {
+      setAccepting(false);
+    }
+  }
 
   return (
     <InnerCard>
@@ -97,7 +109,11 @@ export function SinglePendingDuel(props: { duel: PendingDuel }) {
             </Show>
           </div>
           <h2 class="text-2xl font-bold text-center">
-            {profile()?.profile?.name} has challenged you!
+            {profile()?.profile?.name}
+            <br />
+            <span class="font-light">challenges</span>
+            <br />
+            {state.profile?.name}
           </h2>
           <PreKeyValue key="npub">
             <a
@@ -136,8 +152,19 @@ export function SinglePendingDuel(props: { duel: PendingDuel }) {
             you accept?
           </p>
         </Suspense>
-        <Button>Accept</Button>
-        <Button>Decline</Button>
+        <Show when={error()}>
+          <div class="p-2 bg-red-500 rounded-xl text-white">
+            <pre>{error()?.message}</pre>
+          </div>
+        </Show>
+        <Button
+          onClick={handleAccept}
+          loading={accepting()}
+          disabled={accepting()}
+        >
+          Accept
+        </Button>
+        {/* <Button>Decline</Button> */}
       </VStack>
     </InnerCard>
   );
