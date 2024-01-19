@@ -13,6 +13,7 @@ export function Home() {
       // @ts-expect-error ndk doesn't know about kind 88 yet
       kinds: [88],
       limit: 20,
+      // since: 0,
     });
 
     return decodeNdkEvents(supers);

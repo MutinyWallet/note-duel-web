@@ -47,10 +47,12 @@ export async function decodeNdkEvents(
     }),
   );
 
-  return decoded.filter(
-    (sup) =>
-      (sup.decodedContent?.event_maturity_epoch || 0) > Date.now() / 1000,
-  );
+  return decoded;
+
+  // return decoded.filter(
+  //   (sup) =>
+  //     (sup.decodedContent?.event_maturity_epoch || 0) > Date.now() / 1000,
+  // );
 }
 
 export type Profile = {
