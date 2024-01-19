@@ -83,19 +83,34 @@ export function SinglePendingDuel(props: {
 
   const [profile] = createResource(fetchProfile);
 
-  const [accepting, setAccepting] = createSignal(false);
+  const [loading, setLoading] = createSignal(false);
   const [error, setError] = createSignal<Error | undefined>(undefined);
 
   async function handleAccept() {
     try {
-      setAccepting(true);
+      setLoading(true);
       const res = await state.noteDuel?.accept_bet_wasm(props.duel.id);
       console.log(res);
+      props.refetch();
     } catch (e) {
       console.error(e);
       setError(eify(e));
     } finally {
-      setAccepting(false);
+      setLoading(false);
+    }
+  }
+
+  async function handleDecline() {
+    try {
+      setLoading(true);
+      const res = await state.noteDuel?.reject_bet_wasm(props.duel.id);
+      console.log(res);
+      props.refetch();
+    } catch (e) {
+      console.error(e);
+      setError(eify(e));
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -139,20 +154,22 @@ export function SinglePendingDuel(props: {
         </Suspense>
         <h2 class="text-2xl font-bold">The stakes</h2>
         <p class="text-lg">
-          The <strong>winner</strong> publishes "{`${props.duel.win_a.content}`}
-          " to their nostr feed.
+          The <strong>winner</strong> publishes{" "}
+          <span class="break-all">"{`${props.duel.win_a.content}`}"</span> to
+          their nostr feed.
         </p>
         <p class="text-lg">
-          The <strong>loser</strong> publishes "{`${props.duel.lose_a.content}`}
-          " to their nostr feed.
+          The <strong>loser</strong> publishes{" "}
+          <span class="break-all">"{`${props.duel.lose_a.content}`}"</span> to
+          their nostr feed.
         </p>
         <Suspense>
           <p class="text-lg">
             {profile()?.profile?.name} has bet on{" "}
-            <strong>{`"${props.duel.counterparty_outcomes[0]}"`}</strong> to
-            win. That means your choice is{" "}
-            <strong>{`"${props.duel.user_outcomes[0]}"`}</strong>. Will you
-            accept?
+            <strong class="break-all">{`"${props.duel.counterparty_outcomes[0]}"`}</strong>{" "}
+            to win. That means your choice is{" "}
+            <strong class="break-all">{`"${props.duel.user_outcomes[0]}"`}</strong>
+            . Will you accept?
           </p>
         </Suspense>
         <Show when={error()}>
@@ -160,14 +177,16 @@ export function SinglePendingDuel(props: {
             <pre>{error()?.message}</pre>
           </div>
         </Show>
-        <Button
-          onClick={handleAccept}
-          loading={accepting()}
-          disabled={accepting()}
-        >
+        <Button onClick={handleAccept} loading={loading()} disabled={loading()}>
           Accept
         </Button>
-        {/* <Button>Decline</Button> */}
+        <Button
+          onClick={handleDecline}
+          loading={loading()}
+          disabled={loading()}
+        >
+          Decline
+        </Button>
       </VStack>
     </InnerCard>
   );

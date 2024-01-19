@@ -51,7 +51,7 @@ export function Home() {
           <Show when={supers()?.length === 0}>
             <div>
               No Superpositions found. Maybe you want to{" "}
-              <a href="#">create one?</a>
+              <a href="https://superposition.pages.dev/">create one?</a>
             </div>
           </Show>
           <For each={supers()}>
