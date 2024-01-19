@@ -1,14 +1,7 @@
 import { createForm, getValue, setValue } from "@modular-forms/solid";
 import { useNavigate, useParams } from "@solidjs/router";
-import {
-  For,
-  Show,
-  Suspense,
-  createMemo,
-  createResource,
-  createSignal,
-} from "solid-js";
-import { Button, Header, InnerCard, SmallHeader, VStack } from "~/components";
+import { For, Show, Suspense, createResource, createSignal } from "solid-js";
+import { Button, Header, SmallHeader, VStack } from "~/components";
 import { TextField } from "~/components/TextField";
 import { useMegaStore } from "~/state/megaStore";
 import { decodeNdkEvents, eify } from "~/utils";
@@ -18,18 +11,13 @@ type CreateDuelForm = {
   opponent_npub: string;
   outcome: string;
   losingNote: string;
-  // opponentNote: string;
+  winningNote: string;
 };
 
 export function New() {
   const [state, _actions] = useMegaStore();
   const navigate = useNavigate();
   const [error, setError] = createSignal<Error | undefined>(undefined);
-
-  const onSave = async () => {
-    // setDialogOpen(false);
-    // await refetch();
-  };
 
   const params = useParams();
 
@@ -50,22 +38,21 @@ export function New() {
 
   const [singleEvent] = createResource(params.id, fetchSingle);
 
-  const [creationForm, { Form, Field, FieldArray }] =
-    createForm<CreateDuelForm>({
-      initialValues: {
-        opponent_npub: "",
-        outcome: "",
-        losingNote: "",
-        // opponentNote: "",
-      },
-    });
+  const [creationForm, { Form, Field }] = createForm<CreateDuelForm>({
+    initialValues: {
+      opponent_npub: "",
+      outcome: "",
+      losingNote: "",
+      winningNote: "",
+    },
+  });
 
   async function handleSubmit(f: CreateDuelForm) {
     setError(undefined);
     try {
       console.log(f);
 
-      // create_bet_wasm(losing_message: string, announcement: string, announcement_id: string, counter_party: string, outcomes: (string)[]): Promise<void>;
+      const winningMessage = f.winningNote;
       const losingMessage = f.losingNote;
       const announcement = singleEvent()?.content || "";
       const announcementId = singleEvent()?.id || "";
@@ -73,14 +60,16 @@ export function New() {
       const outcomes = [f.outcome];
 
       console.log("creating bet with", {
+        winningMessage,
         losingMessage,
+
         announcement,
         announcementId,
         counter_party,
         outcomes,
       });
       await state.noteDuel?.create_bet_wasm(
-        "I win!",
+        winningMessage,
         losingMessage,
         announcement,
         announcementId,
@@ -96,13 +85,6 @@ export function New() {
   }
 
   const userSelectedOption = () => getValue(creationForm, "outcome");
-  const opponentImplicitOption = createMemo(() => {
-    if (userSelectedOption()) {
-      return singleEvent()?.decodedContent?.outcomes?.filter(
-        (o) => o !== userSelectedOption(),
-      )[0];
-    }
-  });
 
   return (
     <>
@@ -135,7 +117,7 @@ export function New() {
                 )}
               </Field>
               <Field name="outcome">
-                {(field, props) => (
+                {(field, _props) => (
                   <fieldset>
                     <div class="flex flex-col gap-2">
                       <legend>
@@ -193,6 +175,20 @@ export function New() {
               </Field>
               {/* <pre>Selected value: {getValue(creationForm, "outcome")}</pre> */}
 
+              <Field name="winningNote">
+                {(field, props) => (
+                  <TextField
+                    {...props}
+                    {...field}
+                    multiline
+                    value={field.value}
+                    error={field.error}
+                    label="Winning note"
+                    caption={`This note will be automatically published on the nostr feed of the winner.`}
+                  />
+                )}
+              </Field>
+
               <Field name="losingNote">
                 {(field, props) => (
                   <TextField
@@ -206,20 +202,7 @@ export function New() {
                   />
                 )}
               </Field>
-              {/* <Field name="opponentNote">
-                {(field, props) => (
-                  <TextField
-                    {...props}
-                    {...field}
-                    multiline
-                    value={field.value}
-                    error={field.error}
-                    label="Opponent losing note"
-                    caption={`This note will be automatically published on your opponent's nostr feed if "${userSelectedOption()}" happens`}
-                  />
-                )}
 
-              </Field> */}
               <Show when={error()}>
                 <div class="p-2 bg-red-500 rounded-xl text-white">
                   <pre>{error()?.message}</pre>

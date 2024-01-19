@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@benthecarman/note-duel':
-    specifier: ^0.1.3
-    version: 0.1.3
+    specifier: ^0.1.4
+    version: 0.1.4
   '@fontsource-variable/inter':
     specifier: ^5.0.16
     version: 5.0.16
@@ -1369,8 +1369,8 @@ packages:
       to-fast-properties: 2.0.0
     dev: true
 
-  /@benthecarman/note-duel@0.1.3:
-    resolution: {integrity: sha512-har02gim6NdPcjTGWldHVEfO/8MG2IthZNVTltvrwhf0IC7m0x1EDmQM4BAcYjFtNRdVTIaNKDCZMmeArFwb9w==}
+  /@benthecarman/note-duel@0.1.4:
+    resolution: {integrity: sha512-b9uNyBLwkC5k1pWc7XT8UX6g0VGfsbw/DC+h/2UJNIGLY9dpkgBKkAQmslmKYoahB87Yjrt7HzlNEbliqAnQUQ==}
     dev: false
 
   /@esbuild/android-arm64@0.18.20:
