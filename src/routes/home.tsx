@@ -100,7 +100,7 @@ export function SingleSuper(props: {
           <PreKeyValue key="Oracle Pubkey">
             <a
               class="underline break-all whitespace-pre-wrap"
-              href={`https://njump.me/${npub()}}`}
+              href={`https://njump.me/${npub()}`}
             >
               {npub()}
             </a>
