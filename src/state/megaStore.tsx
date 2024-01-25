@@ -63,7 +63,12 @@ export const Provider: ParentComponent = (props) => {
         await state.ndk.connect(6000);
         console.log("connected");
         const profile = await fetchProfile(state.ndk, npub);
-        setState({ profile });
+        if (profile) {
+          setState({ profile });
+        } else {
+          console.log("no profile found");
+          setState({ profile: { npub, name: "anon" } });
+        }
       } catch (e) {
         console.error(e);
       }

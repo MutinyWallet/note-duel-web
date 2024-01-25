@@ -54,7 +54,7 @@ export async function decodeNdkEvents(
 }
 
 export type Profile = {
-  image: string;
+  image?: string;
   name: string;
   npub: string;
 };
