@@ -155,8 +155,10 @@ export function SinglePendingDuel(props: {
         <h2 class="text-2xl font-bold">The stakes</h2>
         <p class="text-lg">
           The <strong>winner</strong> publishes{" "}
-          <span class="break-all">"{`${props.duel.win_a.content}`}"</span> to
-          their nostr feed.
+          <span class="break-all">
+            "{`${props.duel.win_a.content.replace(/\nnostr:.*$/, "")}`}"
+          </span>{" "}
+          to their nostr feed.
         </p>
         <p class="text-lg">
           The <strong>loser</strong> publishes{" "}
