@@ -84,7 +84,7 @@ export function SingleSuper(props: {
           <PreKeyValue key="Created">
             {new Date((props.super.created_at || 0) * 1000).toLocaleString()}
           </PreKeyValue>
-          <PreKeyValue key="Observe Date">
+          <PreKeyValue key="Due">
             {new Date(
               (props.super.decodedContent?.event_maturity_epoch || 0) * 1000,
             ).toLocaleString()}
