@@ -49,7 +49,8 @@ export async function decodeNdkEvents(
 
   return decoded.filter(
     (sup) =>
-      (sup.decodedContent?.event_maturity_epoch || 0) > Date.now() / 1000,
+      (sup.decodedContent?.event_maturity_epoch || 0) >
+      Date.now() / 1000 - 86_400,
   );
 }
 

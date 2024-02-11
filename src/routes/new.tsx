@@ -4,8 +4,10 @@ import { For, Show, Suspense, createResource, createSignal } from "solid-js";
 import { Button, Header, SmallHeader, VStack } from "~/components";
 import { TextField } from "~/components/TextField";
 import { useMegaStore } from "~/state/megaStore";
-import { decodeNdkEvents, eify } from "~/utils";
+import { DecodedNDKEvent, decodeNdkEvents, eify } from "~/utils";
 import { SingleSuper } from "./home";
+import { NDKEvent } from "@nostr-dev-kit/ndk";
+import { NoteDuel } from "@benthecarman/note-duel";
 
 type CreateDuelForm = {
   opponent_npub: string;
@@ -22,18 +24,23 @@ export function New() {
   const params = useParams();
 
   async function fetchSingle(eventId: string) {
-    const supers = await state.ndk.fetchEvents({
-      ids: [eventId],
-      limit: 1,
-    });
+    const event = await state.ndk.fetchEvent(eventId);
 
-    const decoded = await decodeNdkEvents(supers);
-
-    if (decoded.length === 0) {
+    if (event) {
+      try {
+        const decodedEvent = event as DecodedNDKEvent;
+        decodedEvent.decodedContent = NoteDuel.decode_announcement(
+          event.content,
+        );
+        return decodedEvent;
+      } catch (e) {
+        console.error("failed to decode", eventId);
+        return undefined;
+      }
+    } else {
+      console.error("event not found", eventId);
       return undefined;
     }
-
-    return decoded[0];
   }
 
   const [singleEvent] = createResource(params.id, fetchSingle);
